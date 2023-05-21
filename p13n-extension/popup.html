@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>User Profile Extension</title>
+  <style>
+    body {
+      width: 300px;
+      height: 600px;
+      padding: 10px;
+    }
+
+    .active {
+      background: lightgreen;
+    }
+
+    #profileData {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Select a profile:</h2>
+  <div id="profileList"></div>
+  <h2>Create a new profile:</h2>
+  <input id="profileNameInput" type="text" placeholder="Name" />
+  <input id="ageInput" type="text" placeholder="Age" />
+  <input id="colorInput" type="text" placeholder="Favorite Color" />
+  <input id="locationInput" type="text" placeholder="Location" />
+  <button id="addProfileButton">Create Profile</button>
+  <hr />
+  <h2>Active Profile Data:</h2>
+  <div id="profileData"></div>
+  <script src="popup.js"></script>
+</body>
+
+</html>
