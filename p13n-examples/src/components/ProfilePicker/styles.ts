@@ -11,6 +11,7 @@ export const StyledProfilePicker = styled.div`
   overflow-x: auto;
   border-bottom: 1px solid #ddd;
   padding: 10px 0;
+  background-color: black;
 `;
 
 export const ProfileCard = styled.label`
@@ -18,7 +19,7 @@ export const ProfileCard = styled.label`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #f9f9f9;
+  background-color: darkgrey;
   padding: 10px;
   border-radius: 10px;
   border: 2px solid transparent;

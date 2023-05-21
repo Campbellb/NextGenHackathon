@@ -22,7 +22,7 @@ const ProductPage = () => {
       buttonTextColor: '#fff'
     }
   });
-  const [productImages, setProductImages] = useState<any>([  'https://cdn.shopify.com/s/files/1/0141/1868/2688/products/4.5InchShortSwimTrunksSlimFit-HazeBlue_1024x.jpg?v=1657781757' ]);
+  const [productImages, setProductImages] = useState<any>(['https://cdn.shopify.com/s/files/1/0141/1868/2688/products/4.5InchShortSwimTrunksSlimFit-HazeBlue_1024x.jpg?v=1657781757']);
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
   const [selectedFont, setSelectedFont] = useState<any>(inter);
   const [selectedFontStyles, setSelectedFontStyles] = useState<any>({})
@@ -39,7 +39,7 @@ const ProductPage = () => {
 
   const handleSizeChange = (e) => setSize(e.target.value)
   const handleColorChange = (e) => setColor(e.target.value);
-  const handleBuyClick = () => {};
+  const handleBuyClick = () => { };
   const handleSelectProfile = (profile) => setActiveProfile(profile)
   const nextImage = () => setCurrentImageIndex((currentImageIndex + 1) % productImages.length)
   const prevImage = () => setCurrentImageIndex((currentImageIndex - 1 + productImages.length) % productImages.length)
@@ -49,7 +49,7 @@ const ProductPage = () => {
 
   useEffect(() => {
     if (activeProfile) {
-        (async () => {
+      (async () => {
         const response = await fetch(
           "http://localhost:3000/api/content/create",
           {
@@ -61,16 +61,16 @@ const ProductPage = () => {
         const json = await response.json();
         console.log('json', json)
         setProductSpec(json.content)
-          const imageResponse = await fetch(
-            "http://localhost:3000/api/content/image",
-            {
-              method: 'POST',
-              body: JSON.stringify({ prompt: json.content.image_prompt })
-            }
-          );
-          const imageJson = await imageResponse.json();
-          setProductImages(imageJson.image.map((imgObj) => imgObj.url));
-          setCurrentImageIndex(0);
+        const imageResponse = await fetch(
+          "http://localhost:3000/api/content/image",
+          {
+            method: 'POST',
+            body: JSON.stringify({ prompt: json.content.image_prompt })
+          }
+        );
+        const imageJson = await imageResponse.json();
+        setProductImages(imageJson.image.map((imgObj) => imgObj.url));
+        setCurrentImageIndex(0);
       })();
     }
   }, [activeProfile])
@@ -79,22 +79,22 @@ const ProductPage = () => {
     setSize(productSpec.size)
     setColor(productSpec.color)
     setColorSchema(productSpec.colorSchema)
-    if(activeProfile)
+    if (activeProfile)
       if (activeProfile.age >= 0 && activeProfile.age <= 18) {
         setSelectedFont(openSans)
         setSelectedFontStyles({})
       } else if (activeProfile.age >= 19 && activeProfile.age <= 24) {
         setSelectedFont(oswald)
-        setSelectedFontStyles({fontSize: '16px', lineHeight: 1.5})
+        setSelectedFontStyles({ fontSize: '16px', lineHeight: 1.5 })
       } else if (activeProfile.age >= 25 && activeProfile.age <= 34) {
         setSelectedFont(inter)
-        setSelectedFontStyles({fontSize: '16px', lineHeight: 1.6})
+        setSelectedFontStyles({ fontSize: '16px', lineHeight: 1.6 })
       } else if (activeProfile.age >= 35 && activeProfile.age <= 49) {
         setSelectedFont(roboto)
-        setSelectedFontStyles({fontSize: '18px', lineHeight: 1.6})
+        setSelectedFontStyles({ fontSize: '18px', lineHeight: 1.6 })
       } else if (activeProfile.age >= 50) {
         setSelectedFont(montserrat)
-        setSelectedFontStyles({fontSize: '20px', lineHeight: 1.6})
+        setSelectedFontStyles({ fontSize: '20px', lineHeight: 1.6 })
       }
   }, [productSpec])
 
@@ -104,15 +104,15 @@ const ProductPage = () => {
       <div className={selectedFont.className} style={{ ...selectedFontStyles, height: '100vh', backgroundColor: colorSchema.backgroundColor }}>
         <S.PageTitle style={{ color: colorSchema.buttonColor, marginInlineStart: '1rem' }}>NextGen Outfits</S.PageTitle>
         <S.PageContainer style={{ background: colorSchema.pageContainerColor }}>
-            <S.ProductImageContainer>
-              <S.PreviousButton onClick={prevImage}>&lt;</S.PreviousButton>
-              <S.ProductImage src={productImages[currentImageIndex]} alt="Product" />
-              <S.NextButton onClick={nextImage}>&gt;</S.NextButton>
-            </S.ProductImageContainer>
+          <S.ProductImageContainer>
+            <S.PreviousButton onClick={prevImage}>&lt;</S.PreviousButton>
+            <S.ProductImage src={productImages[currentImageIndex]} alt="Product" />
+            <S.NextButton onClick={nextImage}>&gt;</S.NextButton>
+          </S.ProductImageContainer>
           <S.ProductInfoContainer>
-              <S.ProductTitle style={{ color: colorSchema.titleColor }}>{productSpec.title}</S.ProductTitle>
+            <S.ProductTitle style={{ color: colorSchema.titleColor }}>{productSpec.title}</S.ProductTitle>
             <S.ProductDescription style={{ color: colorSchema.descriptionColor }}>
-                {productSpec.description}
+              {productSpec.description}
             </S.ProductDescription>
             <S.SelectContainer>
               <S.SizeSelect value={size} onChange={handleSizeChange}>

@@ -44,11 +44,13 @@ export default async function handler(
     
     Make sure to include details like location, hobbies, and age, but only if they are relevant and important.
     
+    Modify the title slightly, maybe adding an adjective that fits the user’s profile.
+    
     In the description, don't talk to them in the third person, address them directly. Use the language and tone of a product description on an ecommerce page.
     
     Make sure to pick a size and color based on the profile preferences, and don’t just return the entire list.
     
-    Return the colorSchema property based on the default schema passed in the product definition, but with the colors changed to match the user’s preferences. Do not return the default colors, come up with something new and unique, that is visually appealing. Do not return the default background and text colors.
+    Return the colorSchema property based on the default schema passed in the product definition, but with the colors changed to match the user’s preferences. Do not return the default colors, come up with something new and unique, that is visually appealing. Do not return the default background and text colors. It is extremely important to make sure that there is enough contrast between the text colors and the pageContainerColor.
 
     In the response object, add an additional property, image_prompt, and return a prompt that can be passed to Dalle that generate an image that matches the description, and will act as the visual reference point on the product page. Make sure that the image prompt is as detailed and personalized as possible, based on the selected user preferences. Maintain the language of a high quality image prompt, because this will be consumed by an image generation AI and not read by a human. This isn't addressed to anyone, just a prompt for an AI model. Don't talk about this in the description.
 
