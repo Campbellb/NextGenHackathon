@@ -16,7 +16,7 @@ const ProfilePicker: React.FC<Props> = ({ onProfileChange }) => {
 
   return (
     <StyledProfilePicker>
-      <Logo>p13n</Logo>
+      <Logo>p13n.ai</Logo>
       {profiles.map((profile, index) => (
         <ProfileCard
           key={index}

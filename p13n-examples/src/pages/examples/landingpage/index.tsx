@@ -1,57 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import * as S from './styles';
+import { Page, HeroSection, FeaturesSection, TitleBackground, FeatureCard, HeroSubtitle, RequestDemoButton, FeaturesTitle, Feature, CtaText, PageTitle, CTAButton } from './styles';
 import ProfilePicker from '@/components/ProfilePicker';
 import { roboto, inter, montserrat, openSans, oswald, merriweather } from '@/app/fonts';
 
-const ProductPage = () => {
-  const [size, setSize] = useState('');
-  const [color, setColor] = useState('');
+const LandingPage = () => {
   const [activeProfile, setActiveProfile] = useState<any>(null);
-  const [productSpec, setProductSpec] = useState<any>({
-    title: "Stylish Swim Trunks",
-    description: "These stylish swim trunks are perfect for your summer outings. Made with high quality material, they offer both comfort and durability.Available in different sizes and colors.",
-    sizes: "S",
-    colors: "blue",
-    colorSchema: {
-      backgroundColor: '#eee',
-      pageContainerColor: '#FAFAFA',
-      titleColor: '#333',
-      descriptionColor: '#666',
-      buttonColor: '#1E90FF',
-      buttonHoverColor: '#2388D1',
-      buttonTextColor: '#fff'
-    }
+  const [colorSchema, setColorSchema] = useState({
+    primaryColor: '#1E90FF',
+    descriptionColor: '#666',
+    secondaryColor: '#FAFAFA',
+    tertiaryColor: '#333',
+    quaternaryColor: '#666',
+    quinaryColor: '#eee',
+    buttonColor: '#1E90FF',
+    buttonTextColor: '#fff',
+    pageContainerColor: '#FAFAFA'
   });
-  const [productImages, setProductImages] = useState<any>(['https://cdn.shopify.com/s/files/1/0141/1868/2688/products/4.5InchShortSwimTrunksSlimFit-HazeBlue_1024x.jpg?v=1657781757']);
-  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+  const [pageText, setPageText] = useState({
+    "pageTitle": "Unify",
+    "heroSubtitle": "Unleash the full potential of your startup with our universal platform. Unify brings together diverse solutions under one roof, tailored to your needs, irrespective of size or domain.",
+    "featuresTitle": "Why Partner with Unify?",
+    "featureOne": "Tailored Dashboards - Unify provides a customizable dashboard for real-time data tracking and metrics, aiding in effective decision-making.",
+    "featureTwo": "Collaboration Suite - Our platform includes communication and project management tools to enhance team collaboration and project delivery.",
+    "featureThree": "Integration Capability - Unify seamlessly integrates with your existing tech stack, reducing disruption and simplifying adoption.",
+    "ctaText": "Ready to unify your startup's growth journey?",
+    "ctaButtonText": "Schedule a Free Consultation"
+  });
+  const [heroImage, setHeroImage] = useState('https://nycofficesuites.com/wp-content/uploads/2017/09/Office-team-working-in-meeting-room-for-rent-1.jpg');
   const [selectedFont, setSelectedFont] = useState<any>(inter);
   const [selectedFontStyles, setSelectedFontStyles] = useState<any>({})
-  const [colorSchema, setColorSchema] = useState<any>({
-    backgroundColor: '#eee',
-    pageContainerColor: '#FAFAFA',
-    titleColor: '#333',
-    descriptionColor: '#666',
-    buttonColor: '#1E90FF',
-    buttonHoverColor: '#2388D1',
-    buttonTextColor: '#fff'
-  });
-  const [hover, setHover] = useState(false);
-
-  const handleSizeChange = (e) => setSize(e.target.value)
-  const handleColorChange = (e) => setColor(e.target.value);
-  const handleBuyClick = () => { };
-  const handleSelectProfile = (profile) => setActiveProfile(profile)
-  const nextImage = () => setCurrentImageIndex((currentImageIndex + 1) % productImages.length)
-  const prevImage = () => setCurrentImageIndex((currentImageIndex - 1 + productImages.length) % productImages.length)
-  const handleMouseEnter = () => setHover(true)
-  const handleMouseLeave = () => setHover(false)
-
 
   useEffect(() => {
     if (activeProfile) {
       (async () => {
+        console.log('loading');
         const response = await fetch(
-          "http://localhost:3000/api/content/create",
+          "http://localhost:3000/api/content/landingPageData",
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -60,7 +44,8 @@ const ProductPage = () => {
         );
         const json = await response.json();
         console.log('json', json)
-        setProductSpec(json.content)
+        setColorSchema(json.content.colorSchema)
+        setPageText(json.content.pageText)
         const imageResponse = await fetch(
           "http://localhost:3000/api/content/image",
           {
@@ -69,16 +54,12 @@ const ProductPage = () => {
           }
         );
         const imageJson = await imageResponse.json();
-        setProductImages(imageJson.image.map((imgObj) => imgObj.url));
-        setCurrentImageIndex(0);
+        setHeroImage(imageJson.image);
       })();
     }
   }, [activeProfile])
 
   useEffect(() => {
-    setSize(productSpec.size)
-    setColor(productSpec.color)
-    setColorSchema(productSpec.colorSchema)
     if (activeProfile)
       if (activeProfile.age >= 0 && activeProfile.age <= 18) {
         setSelectedFont(openSans)
@@ -96,55 +77,47 @@ const ProductPage = () => {
         setSelectedFont(montserrat)
         setSelectedFontStyles({ fontSize: '20px', lineHeight: 1.6 })
       }
-  }, [productSpec])
+  }, [pageText])
+
+  const handleSelectProfile = (profile) => setActiveProfile(profile)
+  const handleRequestDemoClick = () => { };
 
   return (
     <>
-      <ProfilePicker onProfileChange={(profile) => handleSelectProfile(profile)} />
-      <div className={selectedFont.className} style={{ ...selectedFontStyles, height: '100vh', backgroundColor: colorSchema.backgroundColor }}>
-        <S.PageTitle style={{ color: colorSchema.buttonColor, marginInlineStart: '1rem' }}>NextGen Outfits</S.PageTitle>
-        <S.PageContainer style={{ background: colorSchema.pageContainerColor }}>
-          <S.ProductImageContainer>
-            <S.PreviousButton onClick={prevImage}>&lt;</S.PreviousButton>
-            <S.ProductImage src={productImages[currentImageIndex]} alt="Product" />
-            <S.NextButton onClick={nextImage}>&gt;</S.NextButton>
-          </S.ProductImageContainer>
-          <S.ProductInfoContainer>
-            <S.ProductTitle style={{ color: colorSchema.titleColor }}>{productSpec.title}</S.ProductTitle>
-            <S.ProductDescription style={{ color: colorSchema.descriptionColor }}>
-              {productSpec.description}
-            </S.ProductDescription>
-            <S.SelectContainer>
-              <S.SizeSelect value={size} onChange={handleSizeChange}>
-                <option value="">Select size</option>
-                <option value="small">Small</option>
-                <option value="medium">Medium</option>
-                <option value="large">Large</option>
-              </S.SizeSelect>
-              <S.ColorSelect value={color} onChange={handleColorChange}>
-                <option value="">Select color</option>
-                <option value="blue">Blue</option>
-                <option value="red">Red</option>
-                <option value="green">Green</option>
-              </S.ColorSelect>
-            </S.SelectContainer>
-            <S.BuyButton onClick={handleBuyClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} style={{ backgroundColor: hover ? colorSchema.buttonHoverColor : colorSchema.buttonColor, color: colorSchema.buttonTextColor }}>Buy Now</S.BuyButton>
-          </S.ProductInfoContainer>
-        </S.PageContainer>
-        {productSpec.recommendedProducts &&
-          <S.RecommendationsContainer style={{ background: colorSchema.pageContainerColor }}>
-            {productSpec.recommendedProducts.map((product, index) =>
-              <S.ProductItem key={`product-${index}`}>
-                <div className="productTitle" color={colorSchema.titleColor}>{product.title}</div>
-                <div className="productDescription" color={colorSchema.descriptionColor}>{product.description}</div>
-                <S.SmallBuyButton onClick={handleBuyClick} style={{ backgroundColor: colorSchema.buttonColor, color: colorSchema.buttonTextColor }}>Buy Now</S.SmallBuyButton>
-              </S.ProductItem>
-            )}
-          </S.RecommendationsContainer>
-        }
+    <ProfilePicker onProfileChange={(profile) => handleSelectProfile(profile)} />
+      <div className={selectedFont.className} style={{ ...selectedFontStyles, height: '100vh' }}>
+    <Page style={{ backgroundColor: colorSchema.quinaryColor }}>
+      <HeroSection style={{ backgroundImage: `url(${heroImage})` }}>
+        <TitleBackground style={{ color: colorSchema.tertiaryColor }}>
+          <PageTitle style={{ color: colorSchema.primaryColor }}>{pageText.pageTitle}</PageTitle>
+            <HeroSubtitle>
+            {pageText.heroSubtitle}
+          </HeroSubtitle>
+              <RequestDemoButton onClick={handleRequestDemoClick} style={{ backgroundColor: colorSchema.buttonColor, color: colorSchema.buttonTextColor }}>
+            {pageText.ctaButtonText}
+          </RequestDemoButton>
+        </TitleBackground>
+      </HeroSection>
+
+      <FeaturesTitle style={{ color: colorSchema.primaryColor }}>{pageText.featuresTitle}</FeaturesTitle>
+      <FeaturesSection>
+        <FeatureCard style={{ color: colorSchema.pageContainerColor }}>
+          <Feature style={{ color: colorSchema.descriptionColor }}>{pageText.featureOne}</Feature>
+        </FeatureCard>
+        <FeatureCard style={{ color: colorSchema.pageContainerColor }}>
+          <Feature style={{ color: colorSchema.descriptionColor }}>{pageText.featureTwo}</Feature>
+        </FeatureCard>
+        <FeatureCard style={{ color: colorSchema.pageContainerColor }}>
+          <Feature style={{ color: colorSchema.descriptionColor }}>{pageText.featureThree}</Feature>
+        </FeatureCard>
+      </FeaturesSection>
+
+      <CtaText style={{ color: colorSchema.primaryColor, textAlign: 'center', fontSize: '2em' }}>{pageText.ctaText}</CtaText>
+      <CTAButton style={{ backgroundColor: colorSchema.buttonColor, color: colorSchema.buttonTextColor }}>Contact Us</CTAButton>
+    </Page>
       </div>
     </>
   );
 };
 
-export default ProductPage;
+export default LandingPage;

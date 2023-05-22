@@ -1,7 +1,7 @@
 export const profiles = [
   {
-    "name": "Bob",
-    "age": 15,
+    "name": "Tom",
+    "age": 34,
     "gender": "male",
     "location": "New York",
     "language": "English",
